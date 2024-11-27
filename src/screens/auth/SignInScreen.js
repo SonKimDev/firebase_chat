@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../constants/theme";
@@ -16,6 +9,10 @@ import Button from "../../components/Button";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../components/Loading";
 import CustomKeyboardView from "../../components/CustomKeyboardView";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, setUser } from "../../store/auth";
+import { authService } from "../../services/authServices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignInScreen() {
   const [form, setForm] = useState({
@@ -30,6 +27,7 @@ export default function SignInScreen() {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   function handleChange(name, value) {
     setForm((prev) => ({
@@ -39,8 +37,7 @@ export default function SignInScreen() {
     }));
   }
 
-  function validateForm() {
-    setIsLoading(true);
+  async function validateForm() {
     let errors = {};
     if (!form.email || !/\S+@\S+\.\S+/.test(form.email)) {
       errors.email = !form.email
@@ -56,12 +53,18 @@ export default function SignInScreen() {
 
     if (Object.keys(errors).length > 0) {
       setForm((prev) => ({ ...prev, errors }));
-    }
-
-    const time = setTimeout(() => {
+    } else {
+      setIsLoading(true);
+      const res = await authService.signIn(form.email, form.password);
+      if (res.success) {
+        await AsyncStorage.setItem("user", JSON.stringify(res.user));
+        dispatch(setUser(res.user));
+        setIsLoading(false);
+      } else {
+        Alert.alert("Login Error", res.msg);
+      }
       setIsLoading(false);
-      clearTimeout(time);
-    }, 3000);
+    }
   }
 
   return isLoading ? (

@@ -14,7 +14,7 @@ export default function Input({
     <View>
       <Text style={[styles.title, error && { color: "red" }]}>{title}</Text>
       <TextInput
-        style={[styles.input, error && { borderColor: "red" }]}
+        style={[styles.input, error && { borderBottomColor: "red" }]}
         value={value}
         secureTextEntry={isPassword ? true : false}
         onChangeText={(text) => onChangeText(name, text)}

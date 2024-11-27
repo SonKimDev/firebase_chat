@@ -9,6 +9,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../components/Loading";
 import CustomKeyboardView from "../../components/CustomKeyboardView";
+import { authService } from "../../services/authServices";
 
 export default function SignUpScreen() {
   const [form, setForm] = useState({
@@ -36,10 +37,10 @@ export default function SignUpScreen() {
     }));
   }
 
-  function validateForm() {
-    setIsLoading(true);
+  async function validateForm() {
     let errors = {};
 
+    // Kiểm tra các lỗi trong form
     if (!form.name) {
       errors.name = "Name is required";
     } else if (form.name.length < 3) {
@@ -63,14 +64,28 @@ export default function SignUpScreen() {
     } else if (form.password !== form.confirmPassword) {
       errors.confirmPassword = "Confirm password is not correct";
     }
-
     if (Object.keys(errors).length > 0) {
       setForm((prev) => ({ ...prev, errors }));
     } else {
-      Alert.alert("Success", "Form submitted successfully!");
+      setIsLoading(true);
+      try {
+        const res = await authService.register(
+          form.name,
+          form.email,
+          form.password
+        );
+        if (res.success) {
+          Alert.alert("Congratulation!", res.msg);
+          navigation.goBack();
+        } else {
+          Alert.alert("Warning!", res.msg);
+        }
+      } catch (error) {
+        Alert.alert("Error", "An error occurred during registration.");
+      } finally {
+        setIsLoading(false);
+      }
     }
-
-    setIsLoading(false);
   }
 
   return isLoading ? (
