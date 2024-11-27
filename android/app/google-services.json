@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "161348818627",
+    "project_id": "fir-chat-b7241",
+    "storage_bucket": "fir-chat-b7241.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161348818627:android:b12a005696d37289d17476",
+        "android_client_info": {
+          "package_name": "com.example.firebasechat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo23Bho5ppzxq8QkN1AGhBSh0Ab4uPhSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
