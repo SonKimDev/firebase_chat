@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { auth, firestore } from "../../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
@@ -73,5 +73,21 @@ export const authService = {
     } catch (error) {
       return { success: false, msg: error.message };
     }
-  }
+  },
+
+  async updateInfomation(userId, data) {
+    try {
+      await updateDoc(doc(firestore, "users", userId), {
+        name: data.name,
+        address: data.address,
+        phoneNumber: data.phoneNumber,
+        avatar: data.avatar,
+      });
+      return { success: true };
+    } catch (error) {
+      return { success: false, msg: error.message };
+    }
+  },
+
+  async changePassword(userId, newPassword) {},
 };

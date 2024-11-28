@@ -40,7 +40,6 @@ export default function SignUpScreen() {
   async function validateForm() {
     let errors = {};
 
-    // Kiểm tra các lỗi trong form
     if (!form.name) {
       errors.name = "Name is required";
     } else if (form.name.length < 3) {
@@ -76,7 +75,6 @@ export default function SignUpScreen() {
         );
         if (res.success) {
           Alert.alert("Congratulation!", res.msg);
-          navigation.goBack();
         } else {
           Alert.alert("Warning!", res.msg);
         }
