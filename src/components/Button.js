@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     backgroundColor: colors.primary,
     borderRadius: 16,
+    borderCurve: "continuous",
   },
   title: {
     paddingVertical: 16,

@@ -9,10 +9,11 @@ import Button from "../../components/Button";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../components/Loading";
 import CustomKeyboardView from "../../components/CustomKeyboardView";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setUser } from "../../store/auth";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/auth";
 import { authService } from "../../services/authServices";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../../../firebaseConfig";
 
 export default function SignInScreen() {
   const [form, setForm] = useState({
@@ -57,9 +58,19 @@ export default function SignInScreen() {
       setIsLoading(true);
       const res = await authService.signIn(form.email, form.password);
       if (res.success) {
-        await AsyncStorage.setItem("user", JSON.stringify(res.user));
-        dispatch(setUser(res.user));
-        setIsLoading(false);
+        try {
+          const uid = res.user.uid;
+          const userDoc = await getDoc(doc(firestore, "users", uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setIsLoading(false);
+            dispatch(setUser(userData));
+          } else {
+            console.log("No user data found in Firestore");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
       } else {
         Alert.alert("Login Error", res.msg);
       }

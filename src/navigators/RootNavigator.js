@@ -2,12 +2,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import AuthNavigator from "./AuthNavigator";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsAuthenticated, setUser } from "../store/auth";
+import { removeUser, selectIsAuthenticated, setUser } from "../store/auth";
 import MainNavigator from "./MainNavigator";
 import { auth, firestore } from "../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import Loading from "../components/Loading";
-import { View } from "react-native";
 
 export default function RootNavigator() {
   const dispatch = useDispatch();
@@ -19,8 +18,7 @@ export default function RootNavigator() {
       if (user) {
         try {
           const uid = user.uid;
-          const userDocRef = doc(firestore, "users", uid);
-          const userDoc = await getDoc(userDocRef);
+          const userDoc = await getDoc(doc(firestore, "users", uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
             setIsLoading(false);
@@ -33,7 +31,7 @@ export default function RootNavigator() {
         }
       } else {
         setIsLoading(false);
-        dispatch(clearUser());
+        dispatch(removeUser());
       }
     });
 

@@ -18,6 +18,7 @@ export default function Input({
         value={value}
         secureTextEntry={isPassword ? true : false}
         onChangeText={(text) => onChangeText(name, text)}
+        autoCapitalize="none"
       />
       <View style={{ height: 30 }}>
         <Text style={{ textAlign: "right", marginTop: 8, color: "red" }}>
