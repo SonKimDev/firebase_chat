@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  updatePassword,
 } from "firebase/auth";
 
 export const authService = {
@@ -89,5 +90,30 @@ export const authService = {
     }
   },
 
-  async changePassword(userId, newPassword) {},
+  async reauthenticateAndChangePassword(email, currentPassword, newPassword) {
+    const user = auth.currentUser;
+
+    if (!user) {
+      return { success: false, msg: "No user is signed in" };
+    }
+
+    try {
+      const credential = signInWithEmailAndPassword(
+        auth,
+        email,
+        currentPassword
+      );
+      await credential;
+
+      await updatePassword(user, newPassword);
+      return { success: true, msg: "Password updated successfully" };
+    } catch (error) {
+      if (error.code === "auth/wrong-password") {
+        return { success: false, msg: "Current password is incorrect" };
+      } else if (error.code === "auth/user-not-found") {
+        return { success: false, msg: "User not found" };
+      }
+      return { success: false, msg: error.message };
+    }
+  },
 };

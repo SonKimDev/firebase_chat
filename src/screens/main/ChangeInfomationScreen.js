@@ -11,6 +11,7 @@ import CustomKeyboardView from "../../components/CustomKeyboardView";
 import { authService } from "../../services/authServices";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../store/auth";
+import Loading from "../../components/Loading";
 
 const ios = Platform.OS == "ios";
 
@@ -26,6 +27,8 @@ export default function ChangeInfomationScreen() {
       phoneNumber: "",
     },
   });
+  const [isLoading, setIsLoading] = useState(false);
+
   const { top } = useSafeAreaInsets();
   const route = useRoute();
   const { user } = route.params;
@@ -73,12 +76,15 @@ export default function ChangeInfomationScreen() {
         phoneNumber: form.phoneNumber,
         avatar: form.avatar,
       };
+      setIsLoading(true);
       const res = await authService.updateInfomation(user.userId, data);
       if (res.success) {
+        setIsLoading(false);
         Alert.alert("Success", "Update infomation successful");
         dispatch(updateUser(data));
         navigation.goBack();
       } else {
+        setIsLoading(false);
         Alert.alert("Fail", res.msg);
       }
     }
@@ -97,7 +103,9 @@ export default function ChangeInfomationScreen() {
     getUser();
   }, []);
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <View style={[styles.container, { paddingTop: ios ? top : top + 10 }]}>
       <StatusBar style="dark" />
       <CustomKeyboardView>
@@ -153,11 +161,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     paddingHorizontal: 24,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
   },
   title: {
     fontSize: 18,
