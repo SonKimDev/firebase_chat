@@ -8,20 +8,20 @@ export default function ChatListItem({ user }) {
       <Image
         source={
           user?.avatar
-            ? { uri: user?.avatar }
+            ? { uri: `data:image/jpeg;base64,${user?.avatar}` }
             : require("../assets/images/avatar.jpg")
         }
         style={styles.avatar}
       />
-      <Space width={12}/>
+      <Space width={12} />
       <View style={{ justifyContent: "center" }}>
-        <Text style={{fontSize: 20, fontWeight: '700', color: 'black'}}>{user.name}</Text>
-        <Space height={6}/>
-        <Text style={{fontSize: 12}}>How are you today?</Text>
+        <Text style={{ fontSize: 20, fontWeight: "700", color: "black" }}>
+          {user.name}
+        </Text>
+        <Space height={6} />
+        <Text style={{ fontSize: 12 }}>How are you today?</Text>
       </View>
-      <View>
-        
-      </View>
+      <View></View>
     </Pressable>
   );
 }

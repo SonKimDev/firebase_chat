@@ -10,7 +10,7 @@ export default function Divider() {
 
 const styles = StyleSheet.create({
   container: {
-    borderBottomWidth: 0.2,
+    borderBottomWidth: 0.3,
     borderColor: colors.gray,
   }
 })

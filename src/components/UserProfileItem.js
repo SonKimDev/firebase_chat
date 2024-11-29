@@ -13,7 +13,7 @@ export default function UserProfileItem({ user, logOutHandle, navigation }) {
       <Image
         source={
           user?.avatar
-            ? { uri: user?.avatar }
+            ? { uri: `data:image/jpeg;base64,${user?.avatar}` }
             : require("../assets/images/avatar.jpg")
         }
         style={styles.avatar}
