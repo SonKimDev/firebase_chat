@@ -1,11 +1,12 @@
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { auth, firestore } from "../../firebaseConfig";
+import { auth, firestore, storage } from "../../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   updatePassword,
 } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const authService = {
   async register(name, email, password) {
@@ -113,6 +114,17 @@ export const authService = {
       } else if (error.code === "auth/user-not-found") {
         return { success: false, msg: "User not found" };
       }
+      return { success: false, msg: error.message };
+    }
+  },
+
+  async uploadAvatar(avatar, userId) {
+    try {
+      await updateDoc(doc(firestore, "users", userId), {
+        avatar: avatar,
+      });
+      return { success: true };
+    } catch (error) {
       return { success: false, msg: error.message };
     }
   },

@@ -33,12 +33,15 @@ const authSlice = createSlice({
       if (action.payload.phoneNumber !== undefined)
         state.user.phoneNumber = action.payload.phoneNumber;
     },
+    updateAvatar: (state, action) => {
+      state.user.avatar = action.payload;
+    },
   },
 });
 
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const selectUser = (state) => state.auth.user;
 
-export const { setUser, removeUser, updateUser, updateEmail } =
+export const { setUser, removeUser, updateUser, updateEmail, updateAvatar } =
   authSlice.actions;
 export default authSlice.reducer;
