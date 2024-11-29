@@ -54,7 +54,7 @@ export default function SignUpScreen() {
 
     if (!form.password) {
       errors.password = "Password is required";
-    } else if (form.password.length < 6) {
+    } else if (form.password.trim().length < 6) {
       errors.password = "Password must be at least 6 characters";
     }
 
