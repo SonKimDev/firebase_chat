@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Space from "./Space";
 import { Menu, MenuOptions, MenuTrigger } from "react-native-popup-menu";
@@ -47,7 +47,7 @@ export default function UserProfileItem({ user, logOutHandle, navigation }) {
               <CustomMenuItem
                 text={"Change Infomations"}
                 action={() =>
-                  navigation.push("ChangeInfomation", { user: user})
+                  navigation.push("ChangeInfomation", { user: user })
                 }
                 icon={
                   <Ionicons

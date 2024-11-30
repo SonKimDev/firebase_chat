@@ -128,7 +128,9 @@ const ProfileScreen = () => {
           <Space height={12} />
           <Text style={styles.infoName}>{user?.name}</Text>
           <Space height={4} />
-          <Text style={styles.friendsCount}>{user?.friends?.length > 0 ? user?.friends?.length : 0} friends</Text>
+          <Text style={styles.friendsCount}>
+            {user?.friends?.length > 0 ? user?.friends?.length : 0} friends
+          </Text>
         </View>
       </View>
       <Space height={24} />

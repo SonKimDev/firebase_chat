@@ -4,11 +4,11 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/auth";
 
-export default function HomeHeader({ title }) {
+export default function HomeHeader({ title, onPress}) {
   const user = useSelector(selectUser);
   return (
     <View style={styles.container}>
-      <Pressable style={styles.iconButtonContainer}>
+      <Pressable onPress={onPress} style={styles.iconButtonContainer}>
         <Ionicons name="search" size={22} color={"white"} />
       </Pressable>
       <Text style={{ fontSize: 20, fontWeight: "700", color: "white" }}>
@@ -18,7 +18,7 @@ export default function HomeHeader({ title }) {
         source={
           user?.avatar
             ? {
-                uri: user?.avatar,
+                uri: `data:images/jpeg;base64,${user?.avatar}`,
               }
             : require("../assets/images/avatar.jpg")
         }
@@ -35,8 +35,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   iconButtonContainer: {
-    borderWidth: 0.2,
+    borderWidth: 0.5,
     borderRadius: 999,
+    borderCurve: "continuous",
     borderColor: "white",
     justifyContent: "center",
     alignItems: "center",
