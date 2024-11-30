@@ -9,6 +9,7 @@ const initialState = {
     createAt: "",
     phoneNumber: "",
     avatar: "",
+    friends: [],
   },
   isAuthenticated: false,
 };

@@ -1,12 +1,20 @@
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { auth, firestore, storage } from "../../firebaseConfig";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { auth, firestore } from "../../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   updatePassword,
 } from "firebase/auth";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const authService = {
   async register(name, email, password) {
@@ -22,6 +30,9 @@ export const authService = {
           name: name,
           userId: userCredential?.user?.uid,
           createAt: new Date().toISOString(),
+          friends: [],
+          address: "",
+          phoneNumber: "",
         });
       }
       return { success: true, msg: "Create your account successful" };
@@ -126,6 +137,24 @@ export const authService = {
       return { success: true };
     } catch (error) {
       return { success: false, msg: error.message };
+    }
+  },
+
+  async getFriends(friendsIds) {
+    try {
+      const q = query(
+        collection(firestore, "users"),
+        where("userId", "in", friendsIds)
+      );
+
+      const querySnapshots = await getDocs(q);
+      let data = [];
+      querySnapshots.forEach((doc) => {
+        data.push({ ...doc.data() });
+      });
+      return {success: true, data}
+    } catch (error) {
+      return [];
     }
   },
 };
