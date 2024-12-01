@@ -4,6 +4,7 @@ import HomeScreen from "../screens/main/HomeScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../constants/theme";
 import SettingScreen from "../screens/main/SettingScreen";
+import FriendScreen from "../screens/main/FriendScreen";
 const Tab = createBottomTabNavigator();
 
 export default function BottomNavigator() {
@@ -31,6 +32,22 @@ export default function BottomNavigator() {
             );
           },
           tabBarLabel: "Message",
+        }}
+      />
+      <Tab.Screen
+        name="Friend"
+        component={FriendScreen}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => {
+            return (
+              <Ionicons
+                name={focused ? "people" : "people-outline"}
+                color={focused ? color : colors.gray}
+                size={size}
+              />
+            );
+          },
+          tabBarLabel: "Friends",
         }}
       />
       <Tab.Screen

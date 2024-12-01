@@ -8,6 +8,7 @@ import { authService } from "../../services/authServices";
 import SettingItem from "../../components/SettingItem";
 import UserProfileItem from "../../components/UserProfileItem";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 const ios = Platform.OS === "ios";
 
