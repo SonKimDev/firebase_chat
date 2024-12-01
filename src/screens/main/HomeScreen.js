@@ -7,9 +7,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ChatListItem from "../../components/ChatListItem";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../store/auth";
-import { authService } from "../../services/authServices";
 import { useNavigation } from "@react-navigation/native";
 import HomeSearchBar from "../../components/HomeSearchBar";
+import { friendServices } from "../../services/friendServices";
 
 const ios = Platform.OS === "ios";
 
@@ -27,7 +27,8 @@ export default function HomeScreen() {
 
   useEffect(() => {
     const getAllFriendDetails = async () => {
-      const res = await authService.getFriends(user.friends);
+      const res = await friendServices.getFriends(user.friends);
+
       if (res.success) {
         setFriendsDetails(res.data);
       }

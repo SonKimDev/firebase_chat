@@ -4,7 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/auth";
 
-export default function HomeHeader({ title, onPress}) {
+export default function HomeHeader({ title, onPress }) {
   const user = useSelector(selectUser);
   return (
     <View style={styles.container}>
