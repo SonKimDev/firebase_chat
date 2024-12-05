@@ -7,14 +7,17 @@ import { colors } from "../constants/theme";
 export default function ChatRoomHeader({ user, navigation }) {
   return (
     <View style={styles.container}>
-      <MaterialCommunityIcons
-        size={24}
-        color={"black"}
-        name="keyboard-backspace"
+      <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}
-      />
+      >
+        <MaterialCommunityIcons
+          size={24}
+          color={"black"}
+          name="keyboard-backspace"
+        />
+      </TouchableOpacity>
       <Space width={12} />
       <View style={styles.avatarContainer}>
         <Image

@@ -122,14 +122,17 @@ const ProfileScreen = () => {
     <View style={[styles.container, { paddingTop: ios ? top : top + 10 }]}>
       <Space height={17} />
       <View style={{ paddingHorizontal: 24 }}>
-        <MaterialCommunityIcons
-          size={24}
-          color={"white"}
-          name="keyboard-backspace"
+        <TouchableOpacity
           onPress={() => {
             navigation.goBack();
           }}
-        />
+        >
+          <MaterialCommunityIcons
+            size={24}
+            color={"white"}
+            name="keyboard-backspace"
+          />
+        </TouchableOpacity>
         <View style={styles.infoContainer}>
           <View>
             <Image
