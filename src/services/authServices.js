@@ -24,6 +24,7 @@ export const authService = {
           friends: [],
           address: "",
           phoneNumber: "",
+          friendRequests: [],
         });
       }
       return { success: true, msg: "Create your account successful" };

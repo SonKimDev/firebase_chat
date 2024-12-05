@@ -6,7 +6,7 @@ export default function PeopleListItem({ item, navigation }) {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.push("Profile", { user: item })}
+      onPress={() => navigation.push("Profile", { user: item, isMe: false})}
     >
       <Image
         source={

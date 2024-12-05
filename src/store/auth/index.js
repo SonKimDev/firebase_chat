@@ -10,6 +10,7 @@ const initialState = {
     phoneNumber: "",
     avatar: "",
     friends: [],
+    friendRequests: [],
   },
   isAuthenticated: false,
 };
@@ -37,12 +38,31 @@ const authSlice = createSlice({
     updateAvatar: (state, action) => {
       state.user.avatar = action.payload;
     },
+    updateFriends: (state, action) => {
+      state.user.friends = action.payload;
+    },
+    addFriend: (state, action) => {
+      state.user.friends.push(action.payload);
+    },
+    removeFriend: (state, action) => {
+      state.user.friends = state.user.friends.filter(
+        (friend) => friend.userId !== action.payload.userId
+      );
+    },
   },
 });
 
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const selectUser = (state) => state.auth.user;
 
-export const { setUser, removeUser, updateUser, updateEmail, updateAvatar } =
-  authSlice.actions;
+export const {
+  setUser,
+  removeUser,
+  updateUser,
+  updateEmail,
+  updateAvatar,
+  updateFriends,
+  addFriend,
+  removeFriend,
+} = authSlice.actions;
 export default authSlice.reducer;
