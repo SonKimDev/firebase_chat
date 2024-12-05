@@ -5,6 +5,7 @@ import ProfileScreen from "../screens/main/ProfileScreen";
 import ChangeInfomationScreen from "../screens/main/ChangeInfomationScreen";
 import ChangePasswordScreen from "../screens/main/ChangePasswordScreen";
 import ChatRoomScreen from "../screens/main/ChatRoomScreen";
+import NotificationScreen from "../screens/main/NotificationScreen";
 const Stack = createNativeStackNavigator();
 
 export default function MainNavigator() {
@@ -21,6 +22,7 @@ export default function MainNavigator() {
       />
       <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
       <Stack.Screen name="ChatRoom" component={ChatRoomScreen} />
+      <Stack.Screen name="Notification" component={NotificationScreen} />
     </Stack.Navigator>
   );
 }

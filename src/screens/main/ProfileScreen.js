@@ -21,6 +21,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { authService } from "../../services/authServices";
+import { friendServices } from "../../services/friendServices";
 
 const ios = Platform.OS === "ios";
 
@@ -28,13 +29,13 @@ const ProfileScreen = () => {
   const { top } = useSafeAreaInsets();
   const navigation = useNavigation();
   const route = useRoute();
-  const { user } = route.params;
-  const me = useSelector(selectUser);
-  const [isMe, setIsMe] = useState(false);
-  const [isFriend, setIsFriend] = useState(isFriend);
+  const { user, isMe } = route.params;
+  const [isFriend, setIsFriend] = useState(false);
   const [avatar, setAvatar] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRequestPending, setIsRequestPending] = useState(false);
 
+  const me = useSelector(selectUser);
   const dispatch = useDispatch();
 
   async function onPickAvatar() {
@@ -52,7 +53,7 @@ const ProfileScreen = () => {
       });
 
       if (base64) {
-        const res = await authService.uploadAvatar(base64, me.userId);
+        const res = await authService.uploadAvatar(base64, user.userId);
         if (res.success) {
           setIsLoading(false);
           Alert.alert("success", "Update avatar successful");
@@ -63,28 +64,61 @@ const ProfileScreen = () => {
     }
   }
 
-  useEffect(() => {
-    const checkUser = () => {
-      if (me.userId === user.userId) {
-        setIsMe(true);
-        setAvatar(me.avatar);
-      } else {
-        setIsMe(false);
-        setAvatar(user.avatar);
-      }
-      const friendsList = me.friends || [];
-      if (friendsList.includes(user.userId)) {
-        setIsFriend(true);
-      } else {
-        setIsFriend(false);
-      }
-    };
-    checkUser();
-  }, [me, user]);
+  async function sendFriendRequest() {
+    setIsLoading(true);
+    const res = await friendServices.sendFriendRequest(me.userId, user.userId);
+    if (res.success) {
+      setIsLoading(false);
+      Alert.alert(
+        "Success",
+        "Send friend request to " + user.name + " successful."
+      );
+    } else {
+      setIsLoading(false);
+      Alert.alert("Fail", res.msg);
+    }
+  }
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  async function removeFriend() {
+    setIsLoading(true);
+    const res = await friendServices.unFriend(me.userId, user.userId);
+    if (res.success) {
+      Alert.alert("Success", "Removed " + user.name + " from friends.");
+      setIsFriend(false);
+    } else {
+      setIsLoading(false);
+      Alert.alert("Fail", res.msg);
+    }
+  }
+
+  useEffect(() => {
+    const getUserStatus = async () => {
+      setAvatar(user.avatar);
+
+      if (!isMe) {
+        const friendRes = await friendServices.isFriend(me.userId, user.userId);
+        setIsFriend(friendRes.success);
+
+        const pendingRes = await friendServices.isRequestPending(
+          me.userId,
+          user.userId
+        );
+        console.log(pendingRes);
+
+        setIsRequestPending(pendingRes.success);
+      }
+
+      setIsLoading(false);
+    };
+
+    getUserStatus();
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return (
     <View style={[styles.container, { paddingTop: ios ? top : top + 10 }]}>
       <Space height={17} />
       <View style={{ paddingHorizontal: 24 }}>
@@ -143,7 +177,7 @@ const ProfileScreen = () => {
         </View>
         <Space height={30} />
         <View>
-          <Text style={styles.title}>Email Adress</Text>
+          <Text style={styles.title}>Email Address</Text>
           <Space height={10} />
           <Text style={styles.content}>{user?.email}</Text>
         </View>
@@ -159,12 +193,19 @@ const ProfileScreen = () => {
           <Space height={10} />
           <Text style={styles.content}>{user?.phoneNumber}</Text>
         </View>
+        <View style={{ flex: 1 }} />
+        {!isMe &&
+          (isFriend ? (
+            <Button title={"Unfriend"} onPress={removeFriend} />
+          ) : isRequestPending ? (
+            <Button
+              title={"Pending please check notifications"}
+              disable={true}
+            />
+          ) : (
+            <Button title={"Add Friend"} onPress={sendFriendRequest} />
+          ))}
         <Space height={30} />
-        {!isMe && !isFriend ? (
-          <Button title={"Add friend"} />
-        ) : !isMe && isFriend ? (
-          <Button title={"remove friend"} />
-        ) : null}
       </View>
     </View>
   );
@@ -204,7 +245,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderCurve: "continuous",
   },
-  titleContainer: {},
   title: {
     color: colors.gray,
     fontSize: 14,

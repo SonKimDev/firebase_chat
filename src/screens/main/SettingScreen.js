@@ -8,7 +8,6 @@ import { authService } from "../../services/authServices";
 import SettingItem from "../../components/SettingItem";
 import UserProfileItem from "../../components/UserProfileItem";
 import { useNavigation } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
 
 const ios = Platform.OS === "ios";
 
@@ -63,7 +62,7 @@ export default function SettingScreen() {
             description={"View your personal information"}
             icon={"heart-outline"}
             onPress={() => {
-              navigation.push("Profile", { user: user });
+              navigation.push("Profile", { user: user, isMe: true});
             }}
           />
           <Space height={30} />
@@ -71,6 +70,9 @@ export default function SettingScreen() {
             title={"Notifications"}
             description={"Messages, group and others"}
             icon={"notifications-outline"}
+            onPress={() => {
+              navigation.push("Notification", { user: user });
+            }}
           />
           <Space height={30} />
           <SettingItem
