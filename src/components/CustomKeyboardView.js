@@ -10,7 +10,12 @@ import {
 
 const isIOS = Platform.OS === "ios";
 
-export default function CustomKeyboardView({ children }) {
+export default function CustomKeyboardView({ children, inChat}) {
+  let scrollViewConfig = {};
+
+  if (inChat) {
+    scrollViewConfig = { contentContainerStyle: { flex: 1 } };
+  }
   return (
     <KeyboardAvoidingView
       behavior={isIOS ? "padding" : "height"}
@@ -18,10 +23,10 @@ export default function CustomKeyboardView({ children }) {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
           bounces={false}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
+          {...scrollViewConfig}
         >
           {children}
         </ScrollView>
