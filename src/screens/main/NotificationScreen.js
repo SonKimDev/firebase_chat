@@ -6,6 +6,7 @@ import {
   FlatList,
   Platform,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { notificationServices } from "../../services/notificationServices";
@@ -56,9 +57,9 @@ export default function NotificationScreen() {
       <View style={[styles.container, { paddingTop: ios ? top : top + 10 }]}>
         <StatusBar style="dark" />
         <Space height={17} />
-        <Pressable onPress={handleBack}>
+        <TouchableOpacity onPress={handleBack}>
           <Ionicons name="arrow-back-outline" size={22} color={"black"} />
-        </Pressable>
+        </TouchableOpacity>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Notifications</Text>
         </View>
@@ -73,9 +74,9 @@ export default function NotificationScreen() {
     <View style={[styles.container, { paddingTop: ios ? top : top + 10 }]}>
       <StatusBar style="dark" />
       <Space height={17} />
-      <Pressable onPress={handleBack}>
+      <TouchableOpacity onPress={handleBack}>
         <Ionicons name="arrow-back-outline" size={22} color={"black"} />
-      </Pressable>
+      </TouchableOpacity>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Notifications</Text>
       </View>

@@ -1,5 +1,5 @@
 import { Platform, StyleSheet, View, TextInput } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Space from "../../components/Space";
 import CustomKeyboardView from "../../components/CustomKeyboardView";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -8,10 +8,14 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import ChatRoomHeader from "../../components/ChatRoomHeader";
 import { Ionicons } from "@expo/vector-icons";
 import ChatInput from "../../components/ChatInput";
+import MessageList from "../../components/MessageList";
 
 const ios = Platform.OS == "ios";
 
 export default function ChatRoomScreen() {
+
+  const [message, setMessage] = useState([])
+
   const { top } = useSafeAreaInsets();
   const navigation = useNavigation();
   const route = useRoute();
@@ -25,7 +29,9 @@ export default function ChatRoomScreen() {
         <View style={styles.header}>
           <ChatRoomHeader user={user} navigation={navigation} />
         </View>
-        <View style={{ flex: 1 }}></View>
+        <View style={{ flex: 1 }}>
+          <MessageList message={message}/>
+        </View>
         <ChatInput />
       </CustomKeyboardView>
     </View>

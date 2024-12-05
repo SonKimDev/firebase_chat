@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import React from "react";
 import Space from "./Space";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,7 +16,7 @@ export default function ChatInput() {
       }}
     >
       <TextInput
-      placeholder="Write your message"
+        placeholder="Write your message"
         style={{
           borderRadius: 12,
           backgroundColor: "#F3F6F6",
@@ -26,7 +26,9 @@ export default function ChatInput() {
         }}
       />
       <Space width={16} />
-      <Ionicons name="mic-outline" size={24} />
+      <TouchableOpacity>
+        <Ionicons name="send" size={24} />
+      </TouchableOpacity>
     </View>
   );
 }

@@ -10,11 +10,11 @@ import {
 
 const isIOS = Platform.OS === "ios";
 
-export default function CustomKeyboardView({ children, style }) {
+export default function CustomKeyboardView({ children }) {
   return (
     <KeyboardAvoidingView
       behavior={isIOS ? "padding" : "height"}
-      style={[styles.container, style]}
+      style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView

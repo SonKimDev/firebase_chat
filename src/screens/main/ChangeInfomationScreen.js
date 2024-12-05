@@ -1,4 +1,11 @@
-import { Alert, Platform, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
@@ -110,14 +117,17 @@ export default function ChangeInfomationScreen() {
       <StatusBar style="dark" />
       <CustomKeyboardView>
         <Space height={16} />
-        <MaterialCommunityIcons
-          size={24}
-          color={"black"}
-          name="keyboard-backspace"
+        <TouchableOpacity
           onPress={() => {
             navigation.goBack();
           }}
-        />
+        >
+          <MaterialCommunityIcons
+            size={24}
+            color={"black"}
+            name="keyboard-backspace"
+          />
+        </TouchableOpacity>
         <Space height={60} />
         <Text style={styles.title}>Change your Infomations</Text>
         <Space height={30} />
