@@ -1,9 +1,46 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Space from "./Space";
 import { colors } from "../constants/theme";
+import { formatTime, getRoomId } from "../utils/common";
+import { chatServices } from "../services/chatServices";
 
-export default function ChatListItem({ user, navigation }) {
+export default function ChatListItem({ user, navigation, currentUser }) {
+  const [lastMessage, setLastMessage] = useState(undefined);
+
+  useEffect(() => {
+    let roomId = getRoomId(currentUser?.userId, user?.userId);
+    const unSub = chatServices.getLastMessageRealtime(roomId, (messages) => {
+      setLastMessage(messages[0] ? messages[0] : null);
+    });
+
+    return () => {
+      if (typeof unSub === "function") {
+        unSub();
+      }
+    };
+  }, [user.userId]);
+
+  function renderDeltaTime() {
+    if (lastMessage) {
+      return formatTime(lastMessage.createAt.seconds * 1000);
+    }
+  }
+
+  function renderLastMessage() {
+    if (typeof lastMessage == undefined) {
+      return "Loading....";
+    }
+    if (lastMessage) {
+      if (currentUser?.userId === lastMessage?.userId) {
+        return "You: " + lastMessage?.text;
+      }
+      return lastMessage?.text;
+    } else {
+      return "Be the first to send a message.";
+    }
+  }
+
   return (
     <TouchableOpacity
       onPress={() => navigation.push("ChatRoom", { user: user })}
@@ -37,12 +74,12 @@ export default function ChatListItem({ user, navigation }) {
           {user.name}
         </Text>
         <Space height={6} />
-        <Text style={{ fontSize: 12 }}>How are you today?</Text>
+        <Text style={{ fontSize: 12 }}>{renderLastMessage()}</Text>
       </View>
       <View
         style={{ alignItems: "flex-end", flex: 1, justifyContent: "center" }}
       >
-        <Text style={styles.lastTimeMessage}>2 minutes ago</Text>
+        <Text style={styles.lastTimeMessage}>{renderDeltaTime()}</Text>
         <Space height={6} />
         <View style={styles.unSeenMessageContainer}>
           <Text style={styles.unSeenMessageContent}>4</Text>

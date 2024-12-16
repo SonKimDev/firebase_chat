@@ -1,5 +1,5 @@
-import { Platform, StyleSheet, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { Keyboard, Platform, StyleSheet, View } from "react-native";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Space from "../../components/Space";
 import CustomKeyboardView from "../../components/CustomKeyboardView";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -20,12 +20,13 @@ export default function ChatRoomScreen() {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
-
   const { top } = useSafeAreaInsets();
   const navigation = useNavigation();
   const route = useRoute();
-  const { user } = route.params;
   const me = useSelector(selectUser);
+  const scrollViewRef = useRef(null);
+
+  const { user } = route.params;
 
   async function handleSendMessage() {
     let message = text.trim();
@@ -43,6 +44,12 @@ export default function ChatRoomScreen() {
     await chatServices.createChatRoomIfNotExists(roomId);
   }
 
+  const updateScrollView = () => {
+    setTimeout(() => {
+      scrollViewRef?.current.scrollToEnd({ animated: true });
+    }, 100);
+  };
+
   useEffect(() => {
     createRoomIfNotExists();
 
@@ -59,6 +66,10 @@ export default function ChatRoomScreen() {
     };
   }, [user.userId]);
 
+  useLayoutEffect(() => {
+    updateScrollView();
+  }, [messages]);
+
   if (loading) {
     return <Loading />;
   }
@@ -72,7 +83,7 @@ export default function ChatRoomScreen() {
       </View>
       <CustomKeyboardView inChat={true}>
         <View style={{ flex: 1 }}>
-          <MessageList messages={messages} />
+          <MessageList scrollViewRef={scrollViewRef} messages={messages} />
         </View>
         <ChatInput
           value={text}

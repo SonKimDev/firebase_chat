@@ -68,4 +68,31 @@ export const chatServices = {
       return { success: false, msg: error.message };
     }
   },
+
+  async getLastMessageRealtime(roomId, callback) {
+    if (!roomId) {
+      return { success: false, msg: "Room ID is required." };
+    }
+
+    try {
+      const docRef = doc(firestore, "rooms", roomId);
+      const messageRef = collection(docRef, "messages");
+      const q = query(messageRef, orderBy("createAt", "desc"));
+      const unSub = onSnapshot(
+        q,
+        (snapshot) => {
+          const allMessages = snapshot.docs.map((doc) => doc.data());
+          callback(allMessages);
+        },
+        (error) => {
+          console.error("Error listening to messages:", error.message);
+          callback([]);
+        }
+      );
+
+      return unSub;
+    } catch (error) {
+      return { success: false, msg: error.message };
+    }
+  },
 };
