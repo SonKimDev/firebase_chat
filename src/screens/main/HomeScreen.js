@@ -10,6 +10,7 @@ import { selectUser } from "../../store/auth";
 import { useNavigation } from "@react-navigation/native";
 import HomeSearchBar from "../../components/HomeSearchBar";
 import { friendServices } from "../../services/friendServices";
+import { getRoomId } from "../../utils/common";
 
 const ios = Platform.OS === "ios";
 
@@ -70,7 +71,7 @@ export default function HomeScreen() {
           <View style={styles.body}>
             <Space height={41} />
             {friendsDetails.length > 0 ? (
-              <ChatListItem user={friendsDetails[0]} navigation={navigation} />
+              <ChatListItem user={friendsDetails[0]} navigation={navigation} currentUser={user}/>
             ) : null}
           </View>
         </View>
